@@ -1,5 +1,5 @@
 # ESP8266-SUB-COUNTER
-A YouTube Subscriber Counter
+A simple YouTube and Instagram Subscriber Counter
 
 This is an ongoing project to create a subscriber counter using an ESP8266 Wemos D1 mini with a LED Matrix Display. 
 
