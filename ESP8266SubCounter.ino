@@ -21,7 +21,7 @@
 #include "theSwedishMaker.h"
 
 
-const uint16_t WAIT_TIME = 6000; //Time between fecthing data.
+const uint16_t WAIT_TIME = 60000; //Time between fecthing data.
 
 
 // Define the typ of hardware and the pins used. 
@@ -40,14 +40,15 @@ MD_Parola P = MD_Parola(HARDWARE_TYPE, DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 
 
 
-#define API_KEY "********" //Your Youtube API-Key 
-#define CHANNEL_ID "Youtube Channel ID" // Your youtube channel ID. 
+#define API_KEY "***********" //Your Youtube API-Key 
+#define CHANNEL_ID "***************" // Your youtube channel ID. 
 
-String userName = "TheSwedishMaker"; // Your Instagram Username
+String INSTAGRAM_ACCESS_TOKEN = "******************";
+String IG_USER_ID = "********************";
 
 
 WiFiClientSecure client; //For ESP8266 boards
-InstagramStats instaStats(client);
+InstagramStats instaStats(client, INSTAGRAM_ACCESS_TOKEN, IG_USER_ID);
 
 YoutubeApi api(API_KEY, client);
 
@@ -56,7 +57,7 @@ YoutubeApi api(API_KEY, client);
 // =======================================================================
 
 const char* ssid     = "NETWORKNAME";      // SSID of local network
-const char* password = "*******";                // Password on network
+const char* password = "**********";                // Password on network
 
 void setup() 
 {
@@ -81,7 +82,7 @@ void setup()
 void loop(void)
 {
 
-  Serial.println("Getting data ...");
+  Serial.println("Getting data ... and stats for " + IG_USER_ID);
   P.print("fetching");
   int cnt = 0;
   //int yt1;
@@ -92,8 +93,11 @@ void loop(void)
      if(api.getChannelStatistics(CHANNEL_ID))
       yt1 = api.channelStats.subscriberCount; 
       yt2 = api.channelStats.viewCount;
-      InstagramUserStats response = instaStats.getUserStats(userName);
-      insta = response.followedByCount;    
+      insta = instaStats.getFollowersCount(IG_USER_ID); 
+
+      Serial.println("Response:");
+      Serial.print("Number of followers: ");
+      Serial.println(insta);
     }
     
     // FORMATO
